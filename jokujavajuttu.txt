@@ -1,0 +1,7 @@
+const card = {
+        label: 'K',
+        value: 13,
+        suit: {
+            name: 'spades',
+        }
+    }
