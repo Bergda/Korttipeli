@@ -37,53 +37,70 @@ async function makeAction(action) {
     const host = 'polar-temple-58359.herokuapp.com';
     const path = '/api/v1/game/';
     const gameId = 'test';
-
     const url = protocol + host + path + gameId;
-    console.log(url);
 
     const reqData = {
         action: action
     }
-    const response = await fetch(url, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(reqData)
-    });
 
-        const respData = await response.json();
+    let respData;
+    try {
+        const response = await fetch(url, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reqData)
+        });
+
+        if (!response.ok) {
+            const error = new Error('Request failed');
+            error.status = rseponse.status;
+            throw (error);
+        }
+
+        respData = await response.json();
+    } catch (error) {
+        console.log(error);
+    }
 
     console.log(action);
     render(respData);
-    return respData;
 
+    return respData;
 }
 
 function render(state) {
     console.log(state);
 
-    const dealerHand = document.getElementById('dealer-hand')
-    dealerHand.innerHtml = '';
+    const dealerHand = document.getElementById('dealer-hand');
+    dealerHand.innerHTML = '';
 
     for (let i = 0; i < state.dealer.cards.length; i++) {
         dealerHand.appendChild(createCard(state.dealer.cards[i]))
     }
 
-    dealerHand.appendChild(createCard(state.dealer.cards[0]))
+    //dealerHand.appendChild(createCard(state.dealer.cards[0]))
 
     const playerHand = document.getElementById('player-hand')
-    playerHand.innerHtml = '';
+    playerHand.innerHTML = '';
 
-    state.player.cards.forEach(element => {
-        playerHand.appendChild(createCard());
+    state.player.cards.forEach(function (element) {
+        playerHand.appendChild(createCard(element));
     });
 
-    playerHand.appendChild(createCard(state.dealer.cards[0]))
+    //playerHand.appendChild(createCard(state.dealer.cards[0]))
 }
 
 
-function createCard(card) {
+// function createCard() {
+//     const newCard = document.createElement('div');
+//     newCard.classList.add('card');
+
+//     return newCard;
+// }
+
+function createCard() {
     const newCard = document.createElement('div');
     newCard.classList.add('card');
 
